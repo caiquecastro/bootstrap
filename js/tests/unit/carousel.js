@@ -16,6 +16,7 @@ $(function () {
     afterEach: function () {
       $.fn.carousel = $.fn.bootstrapCarousel
       delete $.fn.bootstrapCarousel
+      $('#qunit-fixture').html('')
     }
   })
 
@@ -441,6 +442,54 @@ $(function () {
     $carousel.appendTo('body')
     $carousel.bootstrapCarousel(1)
     assert.strictEqual($carousel.data('bs.carousel')._config.interval, false, 'data attribute has higher priority than default options')
+    $carousel.remove()
+  })
+
+  QUnit.test('should set interval from data attribute on individual carousel-item', function (assert) {
+    assert.expect(2)
+    var templateHTML = '<div id="myCarousel" class="carousel slide" data-interval="1814">' +
+        '<div class="carousel-inner">' +
+        '<div class="carousel-item active" data-interval="2814">' +
+        '<img alt="">' +
+        '<div class="carousel-caption">' +
+        '<h4>First Thumbnail label</h4>' +
+        '<p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec ' +
+        'id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ' +
+        'ultricies vehicula ut id elit.</p>' +
+        '</div>' +
+        '</div>' +
+        '<div class="carousel-item" data-interval="3814">' +
+        '<img alt="">' +
+        '<div class="carousel-caption">' +
+        '<h4>Second Thumbnail label</h4>' +
+        '<p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec ' +
+        'id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ' +
+        'ultricies vehicula ut id elit.</p>' +
+        '</div>' +
+        '</div>' +
+        '<div class="carousel-item">' +
+        '<img alt="">' +
+        '<div class="carousel-caption">' +
+        '<h4>Third Thumbnail label</h4>' +
+        '<p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec ' +
+        'id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ' +
+        'ultricies vehicula ut id elit.</p>' +
+        '</div>' +
+        '</div>' +
+        '</div>' +
+        '<a class="left carousel-control" href="#myCarousel" data-slide="prev">&lsaquo;</a>' +
+        '<a class="right carousel-control" href="#myCarousel" data-slide="next">&rsaquo;</a>' +
+        '</div>'
+    var $carousel = $(templateHTML)
+
+    $carousel.appendTo('body')
+    $carousel.bootstrapCarousel(1)
+    assert.strictEqual($carousel.data('bs.carousel')._config.interval, 3814)
+    $carousel.remove()
+
+    $carousel.appendTo('body')
+    $carousel.bootstrapCarousel(2)
+    assert.strictEqual($carousel.data('bs.carousel')._config.interval, 1814, 'reverts to default interval if no data-interval is set')
     $carousel.remove()
   })
 
